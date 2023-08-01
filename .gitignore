@@ -1,1 +1,9 @@
+# some temp file used by vim
+*~
+# Mac system files
+.DS_store
+
+# Python virtual environment
+.python-version
+
 .jenkins-external
