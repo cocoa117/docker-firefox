@@ -12,35 +12,35 @@ ENV TITLE=Firefox-Ubuntu
 
 RUN \
   echo "**** install packages ****" && \
-  apt update && \
-  apt upgrade -y && \
-  apt install -y \
+  apt-get update && \
+  apt-get upgrade -y && \
+  apt-get install -y \
     fonts-noto-core \
     fonts-noto-cjk \
     fonts-noto-cjk-extra \
     language-pack-zh* \
     && \
-  add-apt-repository -y ppa:mozillateam/ppa && \
-  apt update && \
-  echo 'Package: *' > /etc/apt/preferences.d/mozilla-firefox && \
-  echo 'Pin: release o=LP-PPA-mozillateam' >> /etc/apt/preferences.d/mozilla-firefox && \
-  echo 'Pin-Priority: 1001' >> /etc/apt/preferences.d/mozilla-firefox && \
-  apt install -y \
+  curl -L -o - -q https://packages.mozilla.org/apt/repo-signing-key.gpg | tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null && \
+  echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" | tee -a /etc/apt/sources.list.d/mozilla.list > /dev/null && \
+  echo 'Package: *' > /etc/apt/preferences.d/mozilla && \
+  echo 'Pin: origin packages.mozilla.org' >> /etc/apt/preferences.d/mozilla && \
+  echo 'Pin-Priority: 1000' >> /etc/apt/preferences.d/mozilla && \
+  apt-get update && \
+  apt-get install -y \
     firefox \
     python3-xdg \
     && \
-  # curl -L -o /tmp/net.downloadhelper.coapp-1.6.3-1_amd64.deb https://github.com/mi-g/vdhcoapp/releases/download/v1.6.3/net.downloadhelper.coapp-1.6.3-1_amd64.deb && \
   curl -L -o /tmp/net.downloadhelper.coapp.deb https://github.com/aclap-dev/vdhcoapp/releases/latest/download/vdhcoapp-linux-x86_64.deb && \
   dpkg -i /tmp/net.downloadhelper.coapp.deb && \
   sed -i 's|</applications>|  <application title="Mozilla Firefox" type="normal">\n    <maximized>yes</maximized>\n  </application>\n</applications>|' /etc/xdg/openbox/rc.xml && \
   echo "**** default firefox settings ****" && \
-  FIREFOX_SETTING="/usr/lib/firefox/browser/defaults/preferences/firefox.js" && \
-  echo 'pref("datareporting.policy.firstRunURL", "");' > ${FIREFOX_SETTING} && \
-  echo 'pref("datareporting.policy.dataSubmissionEnabled", false);' >> ${FIREFOX_SETTING} && \
-  echo 'pref("datareporting.healthreport.service.enabled", false);' >> ${FIREFOX_SETTING} && \
-  echo 'pref("datareporting.healthreport.uploadEnabled", false);' >> ${FIREFOX_SETTING} && \
-  echo 'pref("trailhead.firstrun.branches", "nofirstrun-empty");' >> ${FIREFOX_SETTING} && \
-  echo 'pref("browser.aboutwelcome.enabled", false);' >> ${FIREFOX_SETTING} && \
+  # FIREFOX_SETTING="/usr/lib/firefox/browser/defaults/preferences/firefox.js" && \
+  # echo 'pref("datareporting.policy.firstRunURL", "");' > ${FIREFOX_SETTING} && \
+  # echo 'pref("datareporting.policy.dataSubmissionEnabled", false);' >> ${FIREFOX_SETTING} && \
+  # echo 'pref("datareporting.healthreport.service.enabled", false);' >> ${FIREFOX_SETTING} && \
+  # echo 'pref("datareporting.healthreport.uploadEnabled", false);' >> ${FIREFOX_SETTING} && \
+  # echo 'pref("trailhead.firstrun.branches", "nofirstrun-empty");' >> ${FIREFOX_SETTING} && \
+  # echo 'pref("browser.aboutwelcome.enabled", false);' >> ${FIREFOX_SETTING} && \
   echo "**** cleanup ****" && \
   rm -rf \
     /tmp/* \
