@@ -29,8 +29,9 @@ RUN \
     firefox \
     python3-xdg \
     && \
-  curl -L -o /tmp/net.downloadhelper.coapp-1.6.3-1_amd64.deb https://github.com/mi-g/vdhcoapp/releases/download/v1.6.3/net.downloadhelper.coapp-1.6.3-1_amd64.deb && \
-  dpkg -i /tmp/net.downloadhelper.coapp-1.6.3-1_amd64.deb && \
+  # curl -L -o /tmp/net.downloadhelper.coapp-1.6.3-1_amd64.deb https://github.com/mi-g/vdhcoapp/releases/download/v1.6.3/net.downloadhelper.coapp-1.6.3-1_amd64.deb && \
+  curl -L -o /tmp/net.downloadhelper.coapp.deb https://github.com/aclap-dev/vdhcoapp/releases/latest/download/vdhcoapp-linux-x86_64.deb && \
+  dpkg -i /tmp/net.downloadhelper.coapp.deb && \
   sed -i 's|</applications>|  <application title="Mozilla Firefox" type="normal">\n    <maximized>yes</maximized>\n  </application>\n</applications>|' /etc/xdg/openbox/rc.xml && \
   echo "**** default firefox settings ****" && \
   FIREFOX_SETTING="/usr/lib/firefox/browser/defaults/preferences/firefox.js" && \
