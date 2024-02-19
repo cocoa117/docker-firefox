@@ -55,3 +55,8 @@ COPY /root /
 EXPOSE 3000
 
 VOLUME /config
+
+# after installation there is potential file permission to prevent video downloadhelper from working
+# to fix this, after the container is started, run the following command
+# /opt/vdhcoapp/vdhcoapp install # (not as root! Don't use sudo)
+# https://github.com/aclap-dev/video-downloadhelper/wiki/CoApp-not-recognized#linux-all
