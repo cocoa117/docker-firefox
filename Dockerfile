@@ -11,6 +11,13 @@ LABEL maintainer="me"
 ENV TITLE=Firefox-Ubuntu
 
 RUN \
+  echo "**** prepare files ****" && \
+  # install the latest firefox https://support.mozilla.org/en-US/kb/install-firefox-linux#w_install-firefox-deb-package-for-debian-based-distributions
+  curl -L -o - -q https://packages.mozilla.org/apt/repo-signing-key.gpg | tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null && \
+  echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" | tee -a /etc/apt/sources.list.d/mozilla.list > /dev/null && \
+  echo 'Package: *' > /etc/apt/preferences.d/mozilla && \
+  echo 'Pin: origin packages.mozilla.org' >> /etc/apt/preferences.d/mozilla && \
+  echo 'Pin-Priority: 1000' >> /etc/apt/preferences.d/mozilla && \
   echo "**** install packages ****" && \
   apt-get update && \
   apt-get upgrade -y && \
@@ -19,15 +26,6 @@ RUN \
     fonts-noto-cjk \
     fonts-noto-cjk-extra \
     language-pack-zh* \
-    && \
-  # install the latest firefox https://support.mozilla.org/en-US/kb/install-firefox-linux#w_install-firefox-deb-package-for-debian-based-distributions
-  curl -L -o - -q https://packages.mozilla.org/apt/repo-signing-key.gpg | tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null && \
-  echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" | tee -a /etc/apt/sources.list.d/mozilla.list > /dev/null && \
-  echo 'Package: *' > /etc/apt/preferences.d/mozilla && \
-  echo 'Pin: origin packages.mozilla.org' >> /etc/apt/preferences.d/mozilla && \
-  echo 'Pin-Priority: 1000' >> /etc/apt/preferences.d/mozilla && \
-  apt-get update && \
-  apt-get install -y \
     firefox \
     python3-xdg \
     && \
